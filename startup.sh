@@ -53,14 +53,14 @@ main() {
     yellow="\033[0;33m"
     NC='\033[0m' # No Color
 
-    display_welcome
-    printf "${blue}-------------------------------\n${blue}"
-    display_date_time
-    printf "${cyan}-------------------------------\n${cyan}"
     display_ip_address
     printf "${yellow}-------------------------------\n${yellow}"
     display_system_info
     printf "${red}-------------------------------\n${red}"
+    display_welcome
+    printf "${yellow}-------------------------------\n${yellow}"
+    display_date_time
+    printf "${cyan}-------------------------------\n${cyan}"
     display_weather
     printf "\n${NC}"
 }
