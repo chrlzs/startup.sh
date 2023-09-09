@@ -1,6 +1,4 @@
-Certainly! Here's the entire message formatted in Markdown:
 
-```markdown
 # Welcome Script
 
 This Bash script provides a colorful welcome message, displays the current date and time, shows the local IP address, and fetches weather information.
@@ -62,6 +60,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 [Charlie Schmidt](https://github.com/chrlzs)
 
 Feel free to reach out with any questions or suggestions!
-```
+
 
 
