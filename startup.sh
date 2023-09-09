@@ -84,7 +84,7 @@ main() {
     printf "${yellow}-------------------------------\n${yellow}"
     display_date_time
     printf "${cyan}-------------------------------\n${cyan}"
-    display_news
+    #display_news
     printf "\n${NC}"
 }
 
