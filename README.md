@@ -22,6 +22,7 @@ Then, run the script:
 - Displays a welcome message with the current user's username.
 - Shows the current date and time.
 - Prints the local IP address.
+- Displays basic system information (uname, CPU info, memory usage, and disk space).
 - Fetches and displays weather information.
 
 ## Requirements
@@ -60,6 +61,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 [Charlie Schmidt](https://github.com/chrlzs)
 
 Feel free to reach out with any questions or suggestions!
+
+
+
 
 
 
