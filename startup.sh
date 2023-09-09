@@ -42,7 +42,7 @@ display_system_info() {
 display_news() {
     sleep 1
     echo "Recent News Headlines:"
-    apiKey=$'[ADD YOUR API KEY]'
+    apiKey=$'[YOUR API KEY HERE]'
 
     for i in {1..3}; do
         newsData=$(curl -s "https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey")
@@ -84,7 +84,7 @@ main() {
     printf "${yellow}-------------------------------\n${yellow}"
     display_date_time
     printf "${cyan}-------------------------------\n${cyan}"
-    #display_news
+    display_news
     printf "\n${NC}"
 }
 

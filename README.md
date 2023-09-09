@@ -1,69 +1,46 @@
 
 # Welcome Script
 
-This Bash script provides a colorful welcome message, displays the current date and time, shows the local IP address, and fetches weather information.
+This Bash script provides a welcome message along with system information, including the local IP address, system details, and recent news headlines.
 
 ## Usage
 
-Make sure the script is executable:
+1. Make sure you have Bash and the required dependencies (jq) installed on your system.
+
+2. Obtain a News API key from [News API](https://newsapi.org/).
+
+3. Insert your News API key into the script.
 
 ```bash
-chmod +x welcome_script.sh
+apiKey="YOUR_API_KEY_HERE"
 ```
 
-Then, run the script:
+4. Run the script:
 
 ```bash
 ./welcome_script.sh
 ```
 
-## Features
+## Functions
 
-- Displays a welcome message with the current user's username.
-- Shows the current date and time.
-- Prints the local IP address.
-- Displays basic system information (uname, CPU info, memory usage, and disk space).
-- Fetches and displays weather information.
+- `display_welcome`: Displays a welcome message, using `figlet` if available.
+- `display_date_time`: Shows the current date and time.
+- `display_ip_address`: Displays the local IP address.
+- `display_system_info`: Provides information about the system, including CPU, memory, and disk space.
+- `display_news`: Fetches and displays the top 2 recent news headlines.
 
-## Requirements
+## Color Codes
 
-- Bash
-- curl (for fetching weather information)
-- figlet (optional, for ASCII art welcome message)
+- Red: System information
+- Cyan: Welcome message
+- Yellow: Date and time
+- Light Cyan: Local IP address
+- Blue: Separator lines
 
-## Getting Started
+## Troubleshooting
 
-Clone the repository:
-
-```bash
-git clone https://github.com/chrlzs/startup.sh.git
-```
-
-## Usage Notes
-
-- If `figlet` is not installed, a basic welcome message will be displayed.
-- Ensure you have an internet connection to fetch weather information.
-
-## Contributing
-
-Feel free to open issues or pull requests for any improvements or customizations you'd like to make.
+If you encounter any issues, make sure you have the necessary dependencies installed and that your API key is correctly formatted.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- [Figlet](http://www.figlet.org/): For creating ASCII art text.
-
-## Author
-
-[Charlie Schmidt](https://github.com/chrlzs)
-
-Feel free to reach out with any questions or suggestions!
-
-
-
-
-
-
+This script is provided under the [MIT License](LICENSE).
