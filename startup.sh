@@ -26,6 +26,18 @@ display_ip_address() {
     hostname -I
 }
 
+# Function to display system information
+display_system_info() {
+    echo "System Information:"
+    uname -a
+    echo "CPU Info:"
+    lscpu
+    echo "Memory Info:"
+    free -h
+    echo "Disk Space:"
+    df -h
+}
+
 # Function to fetch and display weather information
 display_weather() {
     curl wttr.in?format=3 --retry 4
@@ -41,13 +53,16 @@ main() {
     yellow="\033[0;33m"
     NC='\033[0m' # No Color
 
-    printf "Welcome ${cyan}$USER${yellow}\n"
+    display_welcome
+    printf "${blue}-------------------------------\n${blue}"
     display_date_time
-    printf "${blue}-------------------------------\n${lightCyan}"
+    printf "${cyan}-------------------------------\n${cyan}"
     display_ip_address
-    printf "\n${NC}"
+    printf "${yellow}-------------------------------\n${yellow}"
+    display_system_info
+    printf "${red}-------------------------------\n${red}"
     display_weather
-    printf "\n"
+    printf "\n${NC}"
 }
 
 # Run the main function
