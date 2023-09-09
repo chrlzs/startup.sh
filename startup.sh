@@ -12,5 +12,5 @@ echo $currentDate
 printf "${blue}-------------------------------\n${lightCyan}"
 hostname -I
 printf "\n${NC}"
-curl wttr.in?format=3
+curl wttr.in?format=3 --retry 4
 printf "\n"
