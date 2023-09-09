@@ -38,10 +38,33 @@ display_system_info() {
     df -h
 }
 
-# Function to fetch and display weather information
-display_weather() {
-    curl wttr.in?format=3 --retry 4
+# Function to fetch and display recent news headlines
+display_news() {
+    sleep 1
+    echo "Recent News Headlines:"
+    apiKey=$'[ADD YOUR API KEY]'
+
+    for i in {1..3}; do
+        newsData=$(curl -s "https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey")
+        headlines=$(echo $newsData | /usr/bin/jq -r '.articles[]?.title' | head -n 2)
+
+        if [ $? -ne 0 ]; then
+            echo "Error running jq. Check if it's installed and in PATH."
+        fi
+
+        if [ -n "$headlines" ]; then
+            echo "$headlines"
+            return
+        else
+            echo "Retrying... (Attempt $i)"
+            sleep 2  # Wait for a short duration before retrying
+        fi
+    done
+
+    echo "Unable to fetch news headlines after 3 attempts."
 }
+
+
 
 # Main function
 main() {
@@ -61,7 +84,7 @@ main() {
     printf "${yellow}-------------------------------\n${yellow}"
     display_date_time
     printf "${cyan}-------------------------------\n${cyan}"
-    display_weather
+    display_news
     printf "\n${NC}"
 }
 
