@@ -12,7 +12,7 @@ This Bash script provides a welcome message along with system information, inclu
 3. Insert your News API key into the script.
 
 ```bash
-apiKey="YOUR_API_KEY_HERE"
+ apiKey=$'[YOUR API KEY HERE]'
 ```
 
 4. Run the script:
