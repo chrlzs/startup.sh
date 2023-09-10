@@ -69,23 +69,25 @@ display_news() {
 # Main function
 main() {
     # Color definitions
-    red='\033[0;31m'
-    cyan='\033[0;36m'
-    lightCyan='\033[1;36m'
-    blue='\033[0;34m'
-    yellow="\033[0;33m"
-    NC='\033[0m' # No Color
+    red=$(tput setaf 1)
+    green=$(tput setaf 2)
+    yellow=$(tput setaf 3)
+    blue=$(tput setaf 4)
+    magenta=$(tput setaf 5)
+    cyan=$(tput setaf 6)
+    white=$(tput setaf 7)
+    reset=$(tput sgr0)
 
     display_ip_address
-    printf "${yellow}-------------------------------\n${yellow}"
+    printf "${yellow}-------------------------------\n${reset}"
     display_system_info
-    printf "${red}-------------------------------\n${red}"
+    printf "${red}-------------------------------\n${reset}"
     display_welcome
-    printf "${yellow}-------------------------------\n${yellow}"
+    printf "${yellow}-------------------------------\n${reset}"
     display_date_time
-    printf "${cyan}-------------------------------\n${cyan}"
+    printf "${cyan}-------------------------------\n${reset}"
     display_news
-    printf "\n${NC}"
+    printf "\n${white}"
 }
 
 # Run the main function
