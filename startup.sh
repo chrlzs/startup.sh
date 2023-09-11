@@ -42,7 +42,7 @@ display_system_info() {
 display_news() {
     sleep 1
     echo "Recent News Headlines:"
-    apiKey=$'[YOUR API KEY HERE]'
+    apiKey='[YOUR API KEY HERE]'
 
     for i in {1..3}; do
         newsData=$(curl -s "https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey")
