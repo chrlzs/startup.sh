@@ -47,6 +47,11 @@ display_news() {
     echo "Recent News Headlines:"
     apiKey='[YOUR API KEY HERE]'
 
+    if [ -z "$apiKey" ] || [ "$apiKey" = '[YOUR API KEY HERE]' ]; then
+        echo "No valid API key provided. Unable to fetch news headlines."
+        return
+    fi
+
     for i in {1..3}; do
         newsData=$(curl -s "https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey")
         headlines=$(echo $newsData | /usr/bin/jq -r '.articles[]?.title' | head -n 2)
