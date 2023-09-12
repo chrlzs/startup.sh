@@ -8,7 +8,10 @@ command_exists() {
 # Function to display a welcome message
 display_welcome() {
     if command_exists figlet; then
-        figlet -f mini welcome $USER
+        figlet -f mini "W e l c o m e   $USER" | while IFS= read -r line; do
+            echo -e "\033[2K\033[1G$line"
+            sleep 0.1  # Adjust the sleep duration to control the animation speed
+        done
     else
         echo "Welcome $USER"
     fi
