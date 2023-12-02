@@ -12,13 +12,8 @@ This Bash script provides a friendly welcome message along with essential system
 ### Getting Started
 
 1. **Obtain a News API Key** from [News API](https://newsapi.org/).
-2. **Insert your News API Key** into the script:
 
-   ```bash
-   apiKey="[YOUR API KEY HERE]"
-   ```
-
-3. **Create `config.cfg` and `script_log.txt` in the Home Directory**:
+2. **Create `config.cfg` and `script_log.txt` in the Home Directory**:
 
    Create a configuration file `config.cfg` in your home directory with the following content:
 
@@ -35,7 +30,7 @@ This Bash script provides a friendly welcome message along with essential system
    touch ~/script_log.txt
    ```
 
-4. **Run the Script**:
+3. **Run the Script**:
 
    ```bash
    ./welcome_script.sh
