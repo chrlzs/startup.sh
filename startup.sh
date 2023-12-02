@@ -48,7 +48,7 @@ display_news() {
     
     echo "Recent News Headlines:"
 
-    if [ -z "$apiKey" ] || [ "$apiKey" = '[YOUR API KEY HERE]' ]; then
+    if [ -z "$apiKey" ] || [ "$apiKey" = '[API KEY HERE]' ]; then
         echo "No valid API key provided. Unable to fetch news headlines."
         return
     fi
