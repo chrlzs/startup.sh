@@ -2,7 +2,7 @@
 
 # Function to check if a command exists
 command_exists() {
-    command -v $1 > /dev/null 2>&1
+    command -v "$1" > /dev/null 2>&1
 }
 
 # Function to display a welcome message
@@ -10,7 +10,7 @@ display_welcome() {
     if command_exists figlet; then
         figlet -f mini "W e l c o m e   $USER" | while IFS= read -r line; do
             echo -e "\033[2K\033[1G$line"
-            sleep 0.1  # Adjust the sleep duration to control the animation speed
+            sleep 0.1
         done
     else
         echo "Welcome $USER"
@@ -20,7 +20,7 @@ display_welcome() {
 # Function to get and display the current date and time
 display_date_time() {
     currentDate=$(date +"%A, %m %d %Y %I:%M:%S %p")
-    echo $currentDate
+    echo "$currentDate"
 }
 
 # Function to display the local IP address
@@ -43,21 +43,23 @@ display_system_info() {
 
 # Function to fetch and display recent news headlines
 display_news() {
-    sleep 1
+    local retries=3
+    local apiKey='[API KEY HERE]'
+    
     echo "Recent News Headlines:"
-    apiKey='[YOUR API KEY HERE]'
 
     if [ -z "$apiKey" ] || [ "$apiKey" = '[YOUR API KEY HERE]' ]; then
         echo "No valid API key provided. Unable to fetch news headlines."
         return
     fi
-
-    for i in {1..3}; do
+    
+    for ((i = 1; i <= retries; i++)); do
         newsData=$(curl -s "https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey")
-        headlines=$(echo $newsData | /usr/bin/jq -r '.articles[]?.title' | head -n 2)
+        headlines=$(echo "$newsData" | /usr/bin/jq -r '.articles[]?.title' | head -n 2)
 
         if [ $? -ne 0 ]; then
             echo "Error running jq. Check if it's installed and in PATH."
+            return
         fi
 
         if [ -n "$headlines" ]; then
@@ -65,14 +67,28 @@ display_news() {
             return
         else
             echo "Retrying... (Attempt $i)"
-            sleep 2  # Wait for a short duration before retrying
+            sleep 2
         fi
     done
 
-    echo "Unable to fetch news headlines after 3 attempts."
+    echo "Unable to fetch news headlines after $retries attempts."
 }
 
-
+# Function for a basic loading spinner
+loading_spinner() {
+    local pid=$1
+    local spin='-\|/'
+    
+    while [ -d "/proc/$pid" ]; do
+        local temp=${spin#?}
+        printf " [%c] " "$spin"
+        local spin=$temp${spin%"$temp"}
+        sleep 0.1
+        printf "\b\b\b\b\b\b"
+    done
+    
+    printf "    \b\b\b\b"
+}
 
 # Main function
 main() {
