@@ -1,5 +1,22 @@
 #!/bin/bash
 
+CONFIG_FILE="$HOME/config.cfg"
+LOG_FILE="$HOME/script_log.txt"
+
+# Load configuration file
+if [ -f "$CONFIG_FILE" ]; then
+    source "$CONFIG_FILE"
+else
+    echo "Error: Configuration file not found."
+    exit 1
+fi
+
+# Function to log messages
+log_message() {
+    local timestamp=$(date +"%Y-%m-%d %H:%M:%S")
+    echo "[$timestamp] $1" >> "$LOG_FILE"
+}
+
 # Function to check if a command exists
 command_exists() {
     command -v "$1" > /dev/null 2>&1
@@ -41,10 +58,17 @@ display_system_info() {
     df -h
 }
 
+# Function to handle errors
+handle_error() {
+    local error_message="$1"
+    echo "Error: $error_message"
+    log_message "Error: $error_message"
+    exit 1
+}
+
 # Function to fetch and display recent news headlines
 display_news() {
     local retries=3
-    local apiKey='[API KEY HERE]'
 
     # Define variables for API URL and country code
     apiUrl="https://newsapi.org/v2/top-headlines"
@@ -53,13 +77,13 @@ display_news() {
     echo "Recent News Headlines:"
 
     if [ -z "$apiKey" ] || [ "$apiKey" = '[API KEY HERE]' ]; then
-        echo "No valid API key provided. Unable to fetch news headlines."
+        handle_error "No valid API key provided. Unable to fetch news headlines."
         return
     fi
 
     # Check network connectivity
     if ! ping -c 1 google.com > /dev/null 2>&1; then
-        echo "No internet connection. Unable to fetch news headlines."
+        handle_error "No internet connection. Unable to fetch news headlines."
         return
     fi
     
@@ -82,6 +106,8 @@ display_news() {
     done
 
     echo "Unable to fetch news headlines after $retries attempts."
+    log_message "Failed to fetch news headlines after $retries attempts."
+    handle_error "Unable to fetch news headlines."
 }
 
 # Function for a basic loading spinner
@@ -102,6 +128,7 @@ loading_spinner() {
 
 # Main function
 main() {
+    log_message "Script started."
     # Color definitions
     red=$(tput setaf 1)
     green=$(tput setaf 2)
@@ -122,6 +149,7 @@ main() {
     printf "${cyan}-------------------------------\n${reset}"
     display_news
     printf "\n${white}"
+    log_message "Script completed."
 }
 
 # Run the main function
