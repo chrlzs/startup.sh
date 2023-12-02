@@ -7,7 +7,7 @@ This Bash script provides a friendly welcome message along with essential system
 ### Prerequisites
 
 - Bash (usually pre-installed on Unix-based systems)
-- `jq` - A lightweight and flexible command-line JSON processor.
+- [`jq`](https://stedolan.github.io/jq/) - A lightweight and flexible command-line JSON processor.
 
 ### Getting Started
 
@@ -18,7 +18,24 @@ This Bash script provides a friendly welcome message along with essential system
    apiKey="[YOUR API KEY HERE]"
    ```
 
-3. **Run the Script**:
+3. **Create `config.cfg` and `script_log.txt` in the Home Directory**:
+
+   Create a configuration file `config.cfg` in your home directory with the following content:
+
+   ```bash
+   # config.cfg
+
+   # News API Key
+   apiKey="[YOUR API KEY HERE]"
+   ```
+
+   Create an empty log file `script_log.txt` in your home directory:
+
+   ```bash
+   touch ~/script_log.txt
+   ```
+
+4. **Run the Script**:
 
    ```bash
    ./welcome_script.sh
@@ -42,7 +59,7 @@ This Bash script provides a friendly welcome message along with essential system
 
 ## Running Tests
 
-To verify the functionality of the script, a set of tests has been provided. These tests are written using the `Bats` testing framework.
+To verify the functionality of the script, a set of tests has been provided. These tests are written using the [`Bats`](https://github.com/bats-core/bats-core) testing framework.
 
 ### Running the Tests
 
