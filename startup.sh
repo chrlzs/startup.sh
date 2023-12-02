@@ -45,16 +45,26 @@ display_system_info() {
 display_news() {
     local retries=3
     local apiKey='[API KEY HERE]'
-    
+
+    # Define variables for API URL and country code
+    apiUrl="https://newsapi.org/v2/top-headlines"
+    countryCode="us"
+
     echo "Recent News Headlines:"
 
     if [ -z "$apiKey" ] || [ "$apiKey" = '[API KEY HERE]' ]; then
         echo "No valid API key provided. Unable to fetch news headlines."
         return
     fi
+
+    # Check network connectivity
+    if ! ping -c 1 google.com > /dev/null 2>&1; then
+        echo "No internet connection. Unable to fetch news headlines."
+        return
+    fi
     
     for ((i = 1; i <= retries; i++)); do
-        newsData=$(curl -s "https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey")
+        newsData=$(curl -s "$apiUrl?country=$countryCode&apiKey=$apiKey")
         headlines=$(echo "$newsData" | /usr/bin/jq -r '.articles[]?.title' | head -n 2)
 
         if [ $? -ne 0 ]; then
