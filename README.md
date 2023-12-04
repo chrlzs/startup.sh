@@ -21,6 +21,7 @@ This Bash script provides a friendly welcome message along with essential system
    # config.cfg
 
    # News API Key
+   # Get your API Key here: https://newsapi.org/
    apiKey="[YOUR API KEY HERE]"
    ```
 
