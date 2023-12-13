@@ -5,7 +5,7 @@ LOG_FILE="$HOME/script_log.txt"
 
 # Load configuration file
 if [ -f "$CONFIG_FILE" ]; then
-    source "$CONFIG_FILE"
+    . "$CONFIG_FILE"
 else
     echo "Error: Configuration file not found."
     exit 1
@@ -87,7 +87,7 @@ display_news() {
         return
     fi
     
-    for ((i = 1; i <= retries; i++)); do
+    for i in $(seq 1 $retries); do
         newsData=$(curl -s "$apiUrl?country=$countryCode&apiKey=$apiKey")
         headlines=$(echo "$newsData" | /usr/bin/jq -r '.articles[]?.title' | head -n 2)
 
