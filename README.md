@@ -43,7 +43,7 @@ This Bash script provides a friendly welcome message along with essential system
 
 ## Functions
 
-- **display_welcome**: Displays a warm welcome message using figlet if available.
+- **display_welcome**: Displays a welcome message using figlet if available.
 - **display_date_time**: Shows the current date and time.
 - **display_ip_address**: Provides your local IP address.
 - **display_system_info**: Offers details about the system, including CPU, memory, and disk space.
