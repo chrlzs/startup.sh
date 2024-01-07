@@ -11,7 +11,11 @@ This Bash script provides a friendly welcome message along with essential system
 ### Prerequisites
 
 - Bash (usually pre-installed on Unix-based systems)
-- [`jq`](https://stedolan.github.io/jq/) - A lightweight and flexible command-line JSON processor.
+- [`jq`](https://stedolan.github.io/jq/) - A lightweight and flexible command-line JSON processor. You can install it on Debian-based systems using:
+
+  ```bash
+  sudo apt-get install jq
+  ```
 
 ### Getting Started
 
@@ -63,8 +67,14 @@ To verify the functionality of the script, a set of tests has been provided. The
 
 ### Running the Tests
 
-1. Make sure you have `Bats` installed. If not, follow the installation instructions [here](https://github.com/bats-core/bats-core#installing-bats-from-source).
+1. Make sure you have `Bats` installed:
+
+   ```bash
+   sudo apt-get install bats
+   ```
+
 2. Navigate to the directory containing the script and the `tests.bats` file.
+
 3. Run the tests:
 
    ```bash
