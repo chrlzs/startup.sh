@@ -67,6 +67,7 @@ handle_error() {
 }
 
 # Function to fetch and display recent news headlines
+# Function to fetch and display recent news headlines
 display_news() {
     local retries=3
 
@@ -88,15 +89,35 @@ display_news() {
     fi
     
     for i in $(seq 1 $retries); do
-        newsData=$(curl -s "$apiUrl?country=$countryCode&apiKey=$apiKey")
-        headlines=$(echo "$newsData" | /usr/bin/jq -r '.articles[]?.title' | head -n 2)
-
-        if [ $? -ne 0 ]; then
-            echo "Error running jq. Check if it's installed and in PATH."
-            return
+        # Fetch and properly escape the JSON response
+        newsData=$(curl -s "$apiUrl?country=$countryCode&apiKey=$apiKey" | \
+                  perl -pe 's/[\x00-\x1F\x7F-\xFF]/sprintf("\\u%04x",ord($&))/ge' | \
+                  perl -pe 's/\r\n|\r|\n/\\n/g')
+        
+        # Check if curl was successful and if we got valid data
+        if [ $? -ne 0 ] || [ -z "$newsData" ]; then
+            echo "Error fetching data from NewsAPI"
+            continue
+        fi
+        
+        # Debug: Check the response content
+        if [ "$i" -eq 1 ]; then
+            echo "API Response:" >> "$LOG_FILE"
+            echo "$newsData" | head -c 500 >> "$LOG_FILE"
+            echo "..." >> "$LOG_FILE"
         fi
 
-        if [ -n "$headlines" ]; then
+        # Check if response contains error message
+        error=$(echo "$newsData" | jq -r '.status')
+        if [ "$error" = "error" ]; then
+            message=$(echo "$newsData" | jq -r '.message')
+            echo "API Error: $message"
+            continue
+        fi
+
+        headlines=$(echo "$newsData" | jq -r '.articles[]?.title' 2>/dev/null | head -n 2)
+
+        if [ $? -eq 0 ] && [ -n "$headlines" ]; then
             echo "$headlines"
             return
         else
