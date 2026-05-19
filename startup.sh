@@ -67,13 +67,12 @@ handle_error() {
 }
 
 # Function to fetch and display recent news headlines
-# Function to fetch and display recent news headlines
 display_news() {
     local retries=3
 
     # Define variables for API URL and country code
-    apiUrl="https://newsapi.org/v2/top-headlines"
-    countryCode="us"
+    local apiUrl="https://newsapi.org/v2/top-headlines"
+    local countryCode="us"
 
     echo "Recent News Headlines:"
 
@@ -89,15 +88,59 @@ display_news() {
     fi
     
     for i in $(seq 1 $retries); do
-        # Fetch and properly escape the JSON response
-        newsData=$(curl -s "$apiUrl?country=$countryCode&apiKey=$apiKey" | \
-                  perl -pe 's/[\x00-\x1F\x7F-\xFF]/sprintf("\\u%04x",ord($&))/ge' | \
-                  perl -pe 's/\r\n|\r|\n/\\n/g')
+        local newsData sanitizedNewsData error message headlines
+
+        newsData=$(curl -fsS --max-time 15 "$apiUrl?country=$countryCode&apiKey=$apiKey" 2>> "$LOG_FILE")
         
         # Check if curl was successful and if we got valid data
         if [ $? -ne 0 ] || [ -z "$newsData" ]; then
             echo "Error fetching data from NewsAPI"
             continue
+        fi
+
+        if ! printf '%s' "$newsData" | jq -e . > /dev/null 2>&1; then
+            sanitizedNewsData=$(printf '%s' "$newsData" | perl -0777 -pe '
+                my $out = "";
+                my $in_string = 0;
+                my $escaped = 0;
+
+                for my $char (split //) {
+                    my $ord = ord($char);
+
+                    if ($in_string && $ord < 32) {
+                        $out .= sprintf("\\u%04x", $ord);
+                        $escaped = 0;
+                        next;
+                    }
+
+                    if (!$in_string && $ord < 32 && $char !~ /[\t\r\n]/) {
+                        next;
+                    }
+
+                    $out .= $char;
+
+                    if ($escaped) {
+                        $escaped = 0;
+                    } elsif ($char eq "\\") {
+                        $escaped = 1;
+                    } elsif ($char eq "\"") {
+                        $in_string = !$in_string;
+                    }
+                }
+
+                $_ = $out;
+            ')
+
+            if printf '%s' "$sanitizedNewsData" | jq -e . > /dev/null 2>&1; then
+                newsData="$sanitizedNewsData"
+                log_message "Sanitized raw control characters in NewsAPI response."
+            else
+                echo "Invalid JSON received from NewsAPI"
+                log_message "Invalid NewsAPI JSON response: $(printf '%s' "$newsData" | head -c 500)"
+                echo "Retrying... (Attempt $i)"
+                sleep 2
+                continue
+            fi
         fi
         
         # Debug: Check the response content
@@ -108,14 +151,14 @@ display_news() {
         fi
 
         # Check if response contains error message
-        error=$(echo "$newsData" | jq -r '.status')
+        error=$(printf '%s' "$newsData" | jq -r '.status // empty')
         if [ "$error" = "error" ]; then
-            message=$(echo "$newsData" | jq -r '.message')
+            message=$(printf '%s' "$newsData" | jq -r '.message // "Unknown NewsAPI error"')
             echo "API Error: $message"
             continue
         fi
 
-        headlines=$(echo "$newsData" | jq -r '.articles[]?.title' 2>/dev/null | head -n 2)
+        headlines=$(printf '%s' "$newsData" | jq -r '.articles[]?.title' 2>/dev/null | head -n 2)
 
         if [ $? -eq 0 ] && [ -n "$headlines" ]; then
             echo "$headlines"
